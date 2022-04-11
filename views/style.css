@@ -1,0 +1,79 @@
+input{
+	width: 90%;
+	padding: 12px 10px;
+	box-sizing: border-box;
+	margin: 10px 0 10px 0;
+}
+
+#logInButton, #registerButton{
+    width: 90%;
+	background-color: #1877f2;
+	color: white;
+    border: 0px;
+	border-radius: 2px;
+	padding: 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 0 10px 0;
+    cursor: pointer;
+}
+
+#logInButton:hover, #logInButton:active {
+	background-color: #166fe5;
+	color: white;
+}
+
+#registerBtn, #loginBtn, #logoutBtn{
+	background-color: #de6834;
+	padding: 10px 10px;
+    text-decoration: none;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+}
+
+#registerBtn:hover, #loginBtn:hover, #logoutBtn:hover{
+	background-color: #3ba626;
+}
+
+body{
+	text-align: center;
+}
+
+.mainDiv{
+	width: 30%;
+    padding: 20px;
+    margin: auto;
+    border: 1px solid #9B72AA;
+    border-radius: 10px;
+    box-shadow: 10px 10px 8px #888888;
+    margin-top: 8%;
+}
+
+.registerMainDiv{
+    margin-top: 2%;
+}
+
+#errorNode{
+    width: 83%;
+    background-color: #fa0000b5;
+    color: #ffffff;
+    border: 1px solid #243222;
+	padding: 12px 10px;
+    margin: 10px 0 10px 20px;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    background-color: aqua;
+}
+
+#heading{
+    margin: 0px;
+}
+
+img{
+    border-radius: 50%;
+}
