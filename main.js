@@ -44,17 +44,26 @@ app.get("/", function(req, res){
 app.get("/home", function(req, res){
 	if(req.session.isLoggedIn){
         var user = req.session.user;
-        fs.readFile("products.js", "utf-8", function(err, data){
-            res.render("home", 
-            {
-                username: user.username, 
-                profile_pic: user.profile_pic, 
-                products: JSON.parse(data),
-            });
-        })
+        res.render("home", { username: user.username, profile_pic: user.profile_pic });
 	}
 	else
 	res.redirect("login")
+})
+
+app.post("/getProducts", function(req, res){
+    var page = req.body.page;
+    var noproductsToDisplay = page*5;
+    fs.readFile("products.js", "utf-8", function(err, data){
+        var products = JSON.parse(data);
+        if(noproductsToDisplay>products.length)
+            noproductsToDisplay = products.length;
+        
+        var productsToSend = [];
+        for(var i = 0; i < noproductsToDisplay; i++){
+            productsToSend.push(products[i]);
+        }
+        res.end(JSON.stringify(productsToSend));
+    })
 })
 
 app.route("/register").get(function(req, res){

@@ -77,3 +77,26 @@ body{
 img{
     border-radius: 50%;
 }
+
+.productDiv{
+    width: 20%;
+    padding: 20px;
+    margin: auto;
+    border: 1px solid #9B72AA;
+    border-radius: 10px;
+    box-shadow: 10px 10px 8px #888888;
+    margin-top: 8%;
+}
+
+#popup{
+    width: 50%;
+    padding: 20px;
+    margin: auto;
+    border: 1px solid #9B72AA;
+    border-radius: 10px;
+    box-shadow: 10px 10px 8px #888888;
+    position: fixed;
+    margin-left: 22%;
+
+    background-color: #ffffff;
+}
