@@ -4,39 +4,9 @@ const session = require("express-session");
 const multer = require("multer");
 const db = require("./database");
 const userModel = require("./database/models/user.js");
+const sendMail = require("./utils/sendMail");
 
 
-const mailjet = require ('node-mailjet')
-.connect('e07d0cf9ce0c953447cf228848551f0e', 'f9c577c874fc35e7d91be7655040694d')
-const request = mailjet
-.post("send", {'version': 'v3.1'})
-.request({
-  "Messages":[
-    {
-      "From": {
-        "Email": "piyushvyawahare2001@gmail.com",
-        "Name": "Piyush"
-      },
-      "To": [
-        {
-          "Email": "piyushvyawahare2001@gmail.com",
-          "Name": "Piyush"
-        }
-      ],
-      "Subject": "Greetings from Mailjet.",
-      "TextPart": "My first Mailjet email",
-      "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
-      "CustomID": "AppGettingStartedTest"
-    }
-  ]
-})
-request
-  .then((result) => {
-    console.log(result.body)
-  })
-  .catch((err) => {
-    console.log(err.statusCode)
-  })
 
 
 
@@ -144,9 +114,26 @@ app.route("/register").get(function(req, res){
         isVerified: false
 	})
 	.then(function(){
-		res.redirect("login");
+
+        var url = '<h3><a href="http://localhost:3000/verifyUser/'+username+'">Click here </a>to verify your email.</h3>'
+
+        sendMail(
+            email, 
+            "Welcome to magical ECom, Verify email",
+            url,
+            function(err){
+                if(err){
+                    res.render("register", { error: "Unable to send email!!"});
+                }
+                else{
+                    res.render("register", { error: "Email sent successfully, please Verify!!"});
+                }
+            }
+        )
+		//res.redirect("login");
 	})
 	.catch(function(err){
+        console.log(err);
 		res.render("register", { error: "Something went wrong"});
 	})
 });
@@ -154,7 +141,7 @@ app.route("/register").get(function(req, res){
 
 app.route("/login").get(function(req, res){
 
-	res.render("login");
+	res.render("login", {error: ""});
 
 }).post(function(req, res){
 	
@@ -164,14 +151,20 @@ app.route("/login").get(function(req, res){
 	userModel.findOne({username: username, password: password})
 	.then(function(user){
 		if(user){
-			req.session.isLoggedIn = true;
-			req.session.user = user;
+            if(user.isVerified){
+			    req.session.isLoggedIn = true;
+                req.session.user = user;
+                res.redirect("/");
+            }
+            else
+                res.render("login", {error: "Please verify email!!"});
+			
 		}
-		res.redirect("/");
+		
 	})
 	.catch(function(err){
-		console.log(err);
-		res.end("error occured");
+        res.render("login", {error: "User not found!!"});
+        res.end();
 	})
 });
 
@@ -179,6 +172,27 @@ app.route("/login").get(function(req, res){
 app.post("/logout", function(req, res){
 	req.session.destroy();
 	res.redirect("/");
+})
+
+
+
+
+app.get("/verifyUser/:username", function(req, res){
+    const username = req.params.username;
+
+    userModel.findOne({username: username})
+    .then(function(user){
+        if(user){
+
+            userModel.updateOne({username: username}, { isVerified : true}, function(err, data){
+                if(err)
+                    console.log(err);
+                else
+                    res.send("Verification successful, "+"<a href='/login'>login now</a>");
+            });
+            
+        }
+    })
 })
 
 

@@ -9,6 +9,9 @@
 </head>
 <body>
     <div class="mainDiv">
+        <% if(error) { %>
+            <p id="errorNode"><%= error %></p>
+        <% } %>
         <form method="post", action="/login">
             <input type="text" name="username" id="username" placeholder="Enter username*" required><br>
             <input type="password" name="password" id="password" placeholder="Enter password*" required><br>
