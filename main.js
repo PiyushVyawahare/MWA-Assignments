@@ -160,11 +160,13 @@ app.route("/login").get(function(req, res){
                 res.render("login", {error: "Please verify email!!"});
 			
 		}
+        else{
+            res.render("login", {error: "User not found!!"});
+        }
 		
 	})
 	.catch(function(err){
         res.render("login", {error: "User not found!!"});
-        res.end();
 	})
 });
 
@@ -198,9 +200,30 @@ app.get("/verifyUser/:username", function(req, res){
 
 app.route("/changePassword").get(function(req, res){
     var user = req.session.user;
-    res.render("changePassword", { username: user.username, profile_pic: user.profile_pic });
+    res.render("changePassword", { username: user.username, profile_pic: user.profile_pic, error: "" });
 }).post(function(req, res){
+    var npassword = req.body.npassword;
+    var cpassword = req.body.cpassword;
+    var user = req.session.user;
 
+    if(npassword !== cpassword){
+        res.render("changePassword", { username: user.username, profile_pic: user.profile_pic, error: "New passwords not matching" });
+        return;
+    }
+
+    userModel.findOne({username: user.username, password: user.password})
+    .then(function(user){
+        if(user){
+
+            userModel.updateOne({username: user.username, password: user.password}, { password : npassword}, function(err, data){
+                if(err)
+                    console.log(err);
+                else
+                    res.send("Password Changed, "+"<a href='/login'>login now</a>"+" with new password");
+            });
+            
+        }
+    })
 })
 
 
