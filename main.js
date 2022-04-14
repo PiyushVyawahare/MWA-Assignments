@@ -193,6 +193,14 @@ app.get("/verifyUser/:username", function(req, res){
             
         }
     })
+});
+
+
+app.route("/changePassword").get(function(req, res){
+    var user = req.session.user;
+    res.render("changePassword", { username: user.username, profile_pic: user.profile_pic });
+}).post(function(req, res){
+
 })
 
 
