@@ -5,6 +5,42 @@ const multer = require("multer");
 const db = require("./database");
 const userModel = require("./database/models/user.js");
 
+
+const mailjet = require ('node-mailjet')
+.connect('e07d0cf9ce0c953447cf228848551f0e', 'f9c577c874fc35e7d91be7655040694d')
+const request = mailjet
+.post("send", {'version': 'v3.1'})
+.request({
+  "Messages":[
+    {
+      "From": {
+        "Email": "piyushvyawahare2001@gmail.com",
+        "Name": "Piyush"
+      },
+      "To": [
+        {
+          "Email": "piyushvyawahare2001@gmail.com",
+          "Name": "Piyush"
+        }
+      ],
+      "Subject": "Greetings from Mailjet.",
+      "TextPart": "My first Mailjet email",
+      "HTMLPart": "<h3>Dear passenger 1, welcome to <a href='https://www.mailjet.com/'>Mailjet</a>!</h3><br />May the delivery force be with you!",
+      "CustomID": "AppGettingStartedTest"
+    }
+  ]
+})
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+
+
+
+
 var app = express();
 
 app.use(express.json());
@@ -19,7 +55,7 @@ db.init();
 
 app.use(express.urlencoded());
 app.use(express.static("uploads"));
-app.use(express.static("views"));
+app.use(express.static("public"));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -104,7 +140,8 @@ app.route("/register").get(function(req, res){
 		profile_pic: file.filename,
 		email: email,
 		username: username,
-		password: password
+		password: password,
+        isVerified: false
 	})
 	.then(function(){
 		res.redirect("login");
