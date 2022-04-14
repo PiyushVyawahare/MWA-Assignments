@@ -106,6 +106,11 @@ app.route("/register").get(function(req, res){
 		return;
 	}
 
+    userModel.findOne({email: email}).then(function(user){
+        if(user)
+            res.render("register", {error: "Email is already registered with us"});
+        return;
+    })
 	userModel.create({
 		profile_pic: file.filename,
 		email: email,
@@ -225,6 +230,69 @@ app.route("/changePassword").get(function(req, res){
         }
     })
 })
+
+app.route("/forgotPassword").get(function(req, res){
+    res.render("forgotPassword", {error: ""});
+}).post(function(req, res){
+    var email = req.body.email;
+    userModel.findOne({email: email}).then(function(user){
+        if(user){
+            var url = '<h3>Do not worry <a href="http:///localhost:3000/forgotPasswordPage/'+user.email+'">Click here </a>to set new password.</h3>'
+
+            sendMail(
+                email, 
+                "Welcome to magical ECom, Forgot Password?",
+                url,
+                function(err){
+                    if(err){
+                        res.render("forgotPassword", { error: "Unable to send email right now!!"});
+                    }
+                    else{
+                        res.render("forgotPassword", { error: "Email sent successfully, please Check!!"});
+                    }
+                }
+            )
+        }
+        else{
+            res.render("forgotPassword", {error: "Email not registered with us"})
+        }
+    });
+});
+
+
+app.route("/forgotPasswordPage/:email").get(function(req, res){
+    var email = req.params.email;
+    req.session.email = email;
+    res.render("forgotPasswordPage", { error: ""});
+})
+
+app.post("/forgotPasswordPage", function(req, res){
+    var npassword = req.body.npassword;
+    var cpassword = req.body.cpassword;
+    var email = req.session.email;
+    req.session.destroy();
+    if(npassword !== cpassword){
+        res.render("forgotPasswordPage", { error: "New passwords not matching" });
+        return;
+    }
+
+    userModel.findOne({email: email})
+    .then(function(user){
+        if(user){
+
+            userModel.updateOne({email: email}, { password : npassword}, function(err, data){
+                if(err)
+                    console.log(err);
+                else
+                    res.send("Password Changed, "+"<a href='/login'>login now</a>"+" with new password");
+            });
+            
+        }
+        else{
+            res.render("forgotPasswordPage", { error: "User with this link not found!!" })
+        }
+    })
+});
 
 
 app.listen(3000, function(){
