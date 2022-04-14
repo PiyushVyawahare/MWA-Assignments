@@ -100,3 +100,30 @@ img{
 
     background-color: #ffffff;
 }
+
+#changePassBtn{
+    background-color: #1877f2;
+	color: white;
+    border: 0px;
+	border-radius: 2px;
+	padding: 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 0 10px 0;
+    cursor: pointer;
+}
+
+.btn{
+    width: 90%;
+    background-color: #1877f2;
+	color: white;
+    border: 0px;
+	border-radius: 2px;
+	padding: 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 0 10px 0;
+    cursor: pointer;
+}
