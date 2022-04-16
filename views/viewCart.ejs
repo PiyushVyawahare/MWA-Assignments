@@ -1,25 +1,27 @@
 <%- include("partials/header", {loggedIn: loggedIn, name: username, pic: profile_pic}) %>
 
-    <div>
+    <h1>Cart</h1>
+    <div id="btnDiv">
         <button class="goToHomeBtn" id="goToHomeBtn">Go to Home..</button>
     </div>
     <% if(error){ %>
         <h1><%= error %></h1>
     <% } else { %>
     
-
+    <div>
     <% products.forEach(function(product){ %>
 
-        <div class="productDiv">
+        <div class="productDiv" id="<%= product.product_id %>">
             <h4> <%= product.product_name %> </h4>
             <h4> <%= product.product_price %> </h4>
-            <button id="add">+</button>
-            <h4> <%= product.quantity %> </h4>
-            <button id="sub">-</button>
+            <button class="add">+</button>
+            <h4 id="quantity"> <%= product.quantity %> </h4>
+            <button class="sub">-</button><br>
             <button class="removeFromCart">Remove from cart</button>
         </div>
       
     <% }) %> 
+    </div>
 
     <% } %>
 

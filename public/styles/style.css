@@ -174,3 +174,38 @@ img{
 	margin: 10px 5px 10px 5px;
     cursor: pointer;
 }
+
+#goToHomeBtn, #goToCartBtn{
+    background-color: #1877f2;
+	color: white;
+    border: 1px solid #1877f2;
+	border-radius: 2px;
+	padding: 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 5px 10px 5px;
+    cursor: pointer;
+}
+
+#btnDiv{
+    text-align: end;
+}
+
+#quantity{
+    display: inline-block;
+    margin: 5px;
+}
+
+.removeFromCart{
+    background-color: #1877f2;
+	color: white;
+    border: 1px solid #1877f2;
+	border-radius: 2px;
+	padding: 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 5px 10px 0px;
+    cursor: pointer;
+}

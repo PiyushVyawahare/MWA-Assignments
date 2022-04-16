@@ -136,6 +136,44 @@ app.route("/viewCart")
     })
 })
 
+app.post("/removeFromCart", function(req, res){
+
+    var id = req.body.id;
+    console.log(id);
+    cartModel.deleteOne({product_id: id}).then(function(prd){
+        if(prd)
+            res.status(200).end();
+        else
+            res.status(401).end();
+    })
+})
+
+app.post("/changeQuantity", function(req, res){
+
+    var id = req.body.id;
+    var flag = req.body.flag;
+
+    cartModel.findOne({product_id: id}).then(function(product){
+        if(product){
+            if(flag){
+                ++product.quantity;
+                cartModel.updateOne({product_id: id}, {quantity: product.quantity}).then(function(){
+                        res.end(JSON.stringify(product.quantity));
+                })
+            }
+            else{
+                --product.quantity;
+                if(product.quantity <= 0)
+                    product.quantity = 1;
+                cartModel.updateOne({product_id: id}, {quantity: product.quantity}).then(function(){
+                        res.end(JSON.stringify(product.quantity));
+                })
+            }
+        }
+    })
+    
+})
+
 
 app.route("/register").get(function(req, res){
 
@@ -270,14 +308,23 @@ app.get("/verifyUser/:username", function(req, res){
 
 app.route("/changePassword").get(function(req, res){
     var user = req.session.user;
-    res.render("changePassword", { username: user.username, profile_pic: user.profile_pic, error: "" });
+    var loggedIn = req.session.isLoggedIn;
+    if(!loggedIn){
+        res.render("changePassword", { loggedIn: loggedIn, username: "", profile_pic: "", error: "Not logged in.." });
+        return;
+    }
+    res.render("changePassword", { loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic, error: "" });
 }).post(function(req, res){
     var npassword = req.body.npassword;
     var cpassword = req.body.cpassword;
     var user = req.session.user;
-
+    var loggedIn = req.session.isLoggedIn;
+    if(!loggedIn){
+        res.render("changePassword", { loggedIn: loggedIn, username: "", profile_pic: "", error: "Not logged in.." });
+        return;
+    }
     if(npassword !== cpassword){
-        res.render("changePassword", { username: user.username, profile_pic: user.profile_pic, error: "New passwords not matching" });
+        res.render("changePassword", { loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic, error: "New passwords not matching" });
         return;
     }
 
