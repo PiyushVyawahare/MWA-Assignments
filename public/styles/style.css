@@ -70,8 +70,14 @@ body{
     background-color: aqua;
 }
 
-#heading{
+.buttons, .heading{
+    display: inline-block;
+    vertical-align: middle  ;
+}
+
+h1{
     margin: 0px;
+    padding: 0px;
 }
 
 img{

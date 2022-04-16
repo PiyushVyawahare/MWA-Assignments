@@ -7,10 +7,6 @@ const userModel = require("./database/models/user.js");
 const sendMail = require("./utils/sendMail");
 
 
-
-
-
-
 var app = express();
 
 app.use(express.json());
@@ -40,20 +36,16 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 app.get("/", function(req, res){
-	if(req.session.isLoggedIn){
-		res.redirect("home");
-	}
-	else
-		res.redirect("login");
+	res.redirect("home");
 });
 
 app.get("/home", function(req, res){
 	if(req.session.isLoggedIn){
         var user = req.session.user;
-        res.render("home", { username: user.username, profile_pic: user.profile_pic });
+        res.render("home", { loggedIn: true, username: user.username, profile_pic: user.profile_pic });
 	}
 	else
-	res.redirect("login")
+        res.render("home", { loggedIn: false, username: "", profile_pic: "" });
 })
 
 app.post("/getProducts", function(req, res){
