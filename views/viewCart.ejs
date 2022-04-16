@@ -1,0 +1,29 @@
+<%- include("partials/header", {loggedIn: loggedIn, name: username, pic: profile_pic}) %>
+
+    <div>
+        <button class="goToHomeBtn" id="goToHomeBtn">Go to Home..</button>
+    </div>
+    <% if(error){ %>
+        <h1><%= error %></h1>
+    <% } else { %>
+    
+
+    <% products.forEach(function(product){ %>
+
+        <div class="productDiv">
+            <h4> <%= product.product_name %> </h4>
+            <h4> <%= product.product_price %> </h4>
+            <button id="add">+</button>
+            <h4> <%= product.quantity %> </h4>
+            <button id="sub">-</button>
+            <button class="removeFromCart">Remove from cart</button>
+        </div>
+      
+    <% }) %> 
+
+    <% } %>
+
+    <script src="scripts/cartScript.js"></script>
+</body>
+</html>
+

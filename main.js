@@ -4,6 +4,7 @@ const session = require("express-session");
 const multer = require("multer");
 const db = require("./database");
 const userModel = require("./database/models/user.js");
+const cartModel = require("./database/models/cart.js");
 const sendMail = require("./utils/sendMail");
 
 
@@ -50,7 +51,7 @@ app.get("/home", function(req, res){
 
 app.post("/getProducts", function(req, res){
     var page = req.body.page;
-    var noproductsToDisplay = page*5;
+    var noproductsToDisplay = page*4;
     fs.readFile("products.js", "utf-8", function(err, data){
         var products = JSON.parse(data);
         if(noproductsToDisplay>products.length)
@@ -62,7 +63,79 @@ app.post("/getProducts", function(req, res){
         }
         res.end(JSON.stringify(productsToSend));
     })
+});
+
+
+app.route("/cart")
+.post(function(req, res){
+
+    var user = null;
+
+    if(!req.session.isLoggedIn){
+        res.status(401).json({ status: false, message: "Please Login", data: null });
+        return;
+    }
+
+    user = req.session.user;
+
+    var product_id = req.body.id;
+
+    var flag = 0;
+    
+
+    
+    fs.readFile("products.js", "utf-8", function(err, data){
+        var product = null;
+        var products = JSON.parse(data);
+        for(var i = 0; i < products.length; i++){
+            if(products[i]._id ===  product_id)
+                product = products[i];
+        }
+
+        cartModel.findOne({ product_id: product_id, user_id: user._id}).then(function(prd){
+
+            if(prd)
+                res.status(409).json({ status: false, message: "Item already in cart", data: null });
+            else{
+                cartModel.create({
+                    product_id: product_id,
+                    product_image: "random",
+                    product_name: product.name,
+                    product_price: product.price,
+                    product_description: product.description,
+                    user_id: user._id
+                }).then(function(){
+                    res.status(200).json({ status: true, message: "Added to cart", data: null});
+                })
+            }
+        })
+    })
+});
+
+
+app.route("/viewCart")
+.get(function(req, res){
+    var user = null;
+
+    if(!req.session.isLoggedIn){
+        res.redirect("/home");
+        return;
+    }
+
+    user = req.session.user;
+
+    cartModel.find({user_id: user._id}).then(function(products){
+        if(products.length){
+            res.render("viewCart", { error: "", products: products, loggedIn: true, username: user.username, profile_pic: user.profile_pic });
+        }
+        else{
+            res.render("viewCart", {error: "Cart is Empty", products: [], loggedIn: true, username: user.username, profile_pic: user.profile_pic})
+        }
+    }).catch(function(err){
+        console.log("cant find");
+    })
 })
+
 
 app.route("/register").get(function(req, res){
 

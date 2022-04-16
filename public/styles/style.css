@@ -85,13 +85,15 @@ img{
 }
 
 .productDiv{
+    text-align: left;
     width: 20%;
     padding: 20px;
-    margin: auto;
+    margin: 10px;
     border: 1px solid #9B72AA;
     border-radius: 10px;
     box-shadow: 10px 10px 8px #888888;
-    margin-top: 8%;
+    margin-top: 20px;
+    display: inline-block;
 }
 
 #popup{
@@ -131,5 +133,44 @@ img{
 	text-decoration: none;
 	display: inline-block;
 	margin: 10px 0 10px 0;
+    cursor: pointer;
+}
+
+#addToCartBtn{
+    width: 45%;
+    background-color: #1877f2;
+	color: white;
+    border: 1px solid #1877f2;
+	border-radius: 2px;
+	padding: 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 5px 10px 5px;
+    cursor: pointer;
+}
+
+#descBtn{
+    width: 45%;
+    border: 1px solid black;
+	border-radius: 2px;
+	padding: 8px;
+	text-align: center;
+	display: inline-block;
+	margin: 10px 5px 10px 5px;
+    cursor: pointer;
+}
+
+#loadBtn{
+    width: 45%;
+    background-color: #1877f2;
+	color: white;
+    border: 1px solid #1877f2;
+	border-radius: 2px;
+	padding: 8px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 5px 10px 5px;
     cursor: pointer;
 }
