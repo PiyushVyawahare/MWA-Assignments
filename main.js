@@ -3,10 +3,13 @@ const fs = require("fs");
 const session = require("express-session");
 const multer = require("multer");
 const db = require("./database");
-const userModel = require("./database/models/user.js");
+const userModelInstance = require("./database/models/user.js");
 const cartModel = require("./database/models/cart.js");
 const sendMail = require("./utils/sendMail");
 
+
+const userModel = userModelInstance.model;
+const userTypeEnums = userModelInstance.userRoleEnums;
 
 var app = express();
 
@@ -219,7 +222,8 @@ app.route("/register").get(function(req, res){
 		email: email,
 		username: username,
 		password: password,
-        isVerified: false
+        isVerified: false,
+        userType: userTypeEnums.customer
 	})
 	.then(function(){
 
@@ -298,7 +302,7 @@ app.get("/verifyUser/:username", function(req, res){
                 if(err)
                     console.log(err);
                 else
-                    res.send("Verification successful, "+"<a href='/login'>login now</a>");
+                    res.render("login", { error: "Email Verified successfully, login now!!"});
             });
             
         }
@@ -336,7 +340,7 @@ app.route("/changePassword").get(function(req, res){
                 if(err)
                     console.log(err);
                 else
-                    res.send("Password Changed, "+"<a href='/login'>login now</a>"+" with new password");
+                    res.render("login", { error: "Password changed successfully, login now!!"});
             });
             
         }
@@ -396,7 +400,7 @@ app.post("/forgotPasswordPage", function(req, res){
                 if(err)
                     console.log(err);
                 else
-                    res.send("Password Changed, "+"<a href='/login'>login now</a>"+" with new password");
+                    res.render("login", { error: "Password updated successfully, login with new password!!"});
             });
             
         }
