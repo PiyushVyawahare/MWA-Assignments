@@ -6,6 +6,7 @@ const db = require("./database");
 const userModelInstance = require("./database/models/user.js");
 const cartModel = require("./database/models/cart.js");
 const sendMail = require("./utils/sendMail");
+const productModel = require("./database/models/product.js");
 
 
 const userModel = userModelInstance.model;
@@ -24,6 +25,7 @@ app.set('view engine', 'ejs');
 db.init();
 
 app.use(express.urlencoded());
+app.use(express.static("products"));
 app.use(express.static("uploads"));
 app.use(express.static("public"));
 
@@ -37,35 +39,53 @@ const storage = multer.diskStorage({
   }
 });
 
+
+const storage2 = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'products')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix)
+    }
+  });
+
+
 const upload = multer({storage: storage});
+const prd = multer({storage: storage2});
 
 app.get("/", function(req, res){
 	res.redirect("home");
 });
 
-app.get("/home", function(req, res){
-	if(req.session.isLoggedIn){
-        var user = req.session.user;
-        res.render("home", { loggedIn: true, username: user.username, profile_pic: user.profile_pic });
-	}
-	else
-        res.render("home", { loggedIn: false, username: "", profile_pic: "" });
+app.route("/home").get(function(req, res){
+    
+    productModel.find(function(err, products){
+        if(req.session.isLoggedIn){
+            var user = req.session.user;
+            res.render("home", { products: products, loggedIn: true, username: user.username, profile_pic: user.profile_pic, userType: user.userType });
+        }
+        else
+            res.render("home", { products: products, loggedIn: false, username: "", profile_pic: "", userType: 0 });
+    });
+    
 })
 
 app.post("/getProducts", function(req, res){
-    var page = req.body.page;
-    var noproductsToDisplay = page*4;
-    fs.readFile("products.js", "utf-8", function(err, data){
-        var products = JSON.parse(data);
-        if(noproductsToDisplay>products.length)
-            noproductsToDisplay = products.length;
+    
+    
+
+    // fs.readFile("products.js", "utf-8", function(err, data){
+    //     var products = JSON.parse(data);
+    //     if(noproductsToDisplay>products.length)
+    //         noproductsToDisplay = products.length;
         
-        var productsToSend = [];
-        for(var i = 0; i < noproductsToDisplay; i++){
-            productsToSend.push(products[i]);
-        }
-        res.end(JSON.stringify(productsToSend));
-    })
+    //     var productsToSend = [];
+    //     for(var i = 0; i < noproductsToDisplay; i++){
+    //         productsToSend.push(products[i]);
+    //     }
+    //     res.end(JSON.stringify(productsToSend));
+    // })
 });
 
 
@@ -82,19 +102,13 @@ app.route("/cart")
     user = req.session.user;
 
     var product_id = req.body.id;
-
+    // console.log(product_id);
     var flag = 0;
     
 
     
-    fs.readFile("products.js", "utf-8", function(err, data){
-        var product = null;
-        var products = JSON.parse(data);
-        for(var i = 0; i < products.length; i++){
-            if(products[i]._id ===  product_id)
-                product = products[i];
-        }
-
+    productModel.findOne({_id: product_id}).then(function(product){
+        // console.log(product);
         cartModel.findOne({ product_id: product_id, user_id: user._id}).then(function(prd){
 
             if(prd)
@@ -102,10 +116,10 @@ app.route("/cart")
             else{
                 cartModel.create({
                     product_id: product_id,
-                    product_image: "random",
-                    product_name: product.name,
-                    product_price: product.price,
-                    product_description: product.description,
+                    product_pic: product.product_pic,
+                    product_name: product.product_name,
+                    product_price: product.product_price,
+                    product_description: product.product_desc,
                     user_id: user._id
                 }).then(function(){
                     res.status(200).json({ status: true, message: "Added to cart", data: null});
@@ -129,20 +143,20 @@ app.route("/viewCart")
 
     cartModel.find({user_id: user._id}).then(function(products){
         if(products.length){
-            res.render("viewCart", { error: "", products: products, loggedIn: true, username: user.username, profile_pic: user.profile_pic });
+            res.render("viewCart", { error: "", products: products, loggedIn: true, username: user.username, profile_pic: user.profile_pic, userType: user.userType });
         }
         else{
-            res.render("viewCart", {error: "Cart is Empty", products: [], loggedIn: true, username: user.username, profile_pic: user.profile_pic})
+            res.render("viewCart", {error: "Cart is Empty", products: [], loggedIn: true, username: user.username, profile_pic: user.profile_pic, userType: user.userType })
         }
     }).catch(function(err){
-        console.log("cant find");
+        // console.log("cant find");
     })
 })
 
 app.post("/removeFromCart", function(req, res){
 
     var id = req.body.id;
-    console.log(id);
+    // console.log(id);
     cartModel.deleteOne({product_id: id}).then(function(prd){
         if(prd)
             res.status(200).end();
@@ -215,39 +229,41 @@ app.route("/register").get(function(req, res){
     userModel.findOne({email: email}).then(function(user){
         if(user)
             res.render("register", {error: "Email is already registered with us"});
-        return;
+        else{
+            userModel.create({
+                profile_pic: file.filename,
+                email: email,
+                username: username,
+                password: password,
+                isVerified: false,
+                userType: userTypeEnums.admin
+            })
+            .then(function(){
+        
+                var url = '<h3><a href="http://localhost:3000/verifyUser/'+username+'">Click here </a>to verify your email.</h3>'
+        
+                sendMail(
+                    email, 
+                    "Welcome to magical ECom, Verify email",
+                    url,
+                    function(err){
+                        if(err){
+                            res.render("register", { error: "Unable to send email!!"});
+                        }
+                        else{
+                            res.render("register", { error: "Email sent successfully, please Verify!!"});
+                        }
+                    }
+                )
+                //res.redirect("login");
+            })
+            .catch(function(err){
+                // console.log(err);
+                res.render("register", { error: "Something went wrong"});
+            })
+        }
     })
-	userModel.create({
-		profile_pic: file.filename,
-		email: email,
-		username: username,
-		password: password,
-        isVerified: false,
-        userType: userTypeEnums.customer
-	})
-	.then(function(){
-
-        var url = '<h3><a href="http://localhost:3000/verifyUser/'+username+'">Click here </a>to verify your email.</h3>'
-
-        sendMail(
-            email, 
-            "Welcome to magical ECom, Verify email",
-            url,
-            function(err){
-                if(err){
-                    res.render("register", { error: "Unable to send email!!"});
-                }
-                else{
-                    res.render("register", { error: "Email sent successfully, please Verify!!"});
-                }
-            }
-        )
-		//res.redirect("login");
-	})
-	.catch(function(err){
-        console.log(err);
-		res.render("register", { error: "Something went wrong"});
-	})
+	
 });
 
 
@@ -300,7 +316,7 @@ app.get("/verifyUser/:username", function(req, res){
 
             userModel.updateOne({username: username}, { isVerified : true}, function(err, data){
                 if(err)
-                    console.log(err);
+                    res.render("login", { error: "Error occured while verifying email!!"});
                 else
                     res.render("login", { error: "Email Verified successfully, login now!!"});
             });
@@ -338,7 +354,7 @@ app.route("/changePassword").get(function(req, res){
 
             userModel.updateOne({username: user.username, password: user.password}, { password : npassword}, function(err, data){
                 if(err)
-                    console.log(err);
+                    res.render("login", { error: "Error while changing password!!"});
                 else
                     res.render("login", { error: "Password changed successfully, login now!!"});
             });
@@ -398,7 +414,7 @@ app.post("/forgotPasswordPage", function(req, res){
 
             userModel.updateOne({email: email}, { password : npassword}, function(err, data){
                 if(err)
-                    console.log(err);
+                    res.render("login", { error: "Can't update password!!"});
                 else
                     res.render("login", { error: "Password updated successfully, login with new password!!"});
             });
@@ -409,6 +425,71 @@ app.post("/forgotPasswordPage", function(req, res){
         }
     })
 });
+
+
+// admin side work
+
+app.route("/addProduct").get(function(req, res){
+
+    
+    var loggedIn = req.session.isLoggedIn;
+    if(loggedIn){
+        var user = req.session.user;
+        if(user.userType === 1)
+            res.render("addProduct", { error: "", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+        else
+            res.redirect("home");
+    }
+    else
+        res.redirect("home");
+}).post(prd.single("product_pic"), function(req, res){
+
+
+    var user = req.session.user;
+    var loggedIn = req.session.isLoggedIn;
+
+	var file = req.file;
+	var name = req.body.productname;
+	var price = req.body.productprice;
+	var stock = req.body.productstock;
+	var desc = req.body.productdesc;
+
+	// if(!file){
+	// 	res.render("addProduct", { error: "Add profile picture"});
+	// 	return;
+	// }
+	// if(!name){
+	// 	res.render("addProduct", { error: "Enter product name"});
+	// 	return;
+	// }
+	// if(!price){
+	// 	res.render("addProduct", { error: "Enter price"});
+	// 	return;
+	// }
+	// if(!stock){
+	// 	res.render("addProduct", { error: "Enter product stock"});
+	// 	return;
+	// }
+    // if(!desc){
+	// 	res.render("addProduct", { error: "Enter description"});
+	// 	return;
+	// }
+
+    productModel.create({
+        product_pic: file.filename,
+        product_name: name,
+        product_price: price,
+        product_stock: stock,
+        product_desc: desc,
+    })
+    .then(function(){
+        res.render("addProduct", { error: "Product added successfully!!", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic });
+    })
+    .catch(function(err){
+        // console.log(err);
+        res.render("addProduct", { error: "Something went wrong", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic });
+    })
+})
 
 
 app.listen(3000, function(){

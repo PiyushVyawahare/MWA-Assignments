@@ -5,7 +5,7 @@ const cartSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    product_image:{
+    product_pic:{
         type: String,
         required: true
     },

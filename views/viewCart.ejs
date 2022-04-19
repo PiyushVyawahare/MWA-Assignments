@@ -12,6 +12,7 @@
     <% products.forEach(function(product){ %>
 
         <div class="productDiv" id="<%= product.product_id %>">
+            <img src="<%= product.product_pic %>" alt="product_pic" width="200px" height="200px">
             <h4> <%= product.product_name %> </h4>
             <h4> <%= product.product_price %> </h4>
             <button class="add">+</button>

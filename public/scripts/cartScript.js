@@ -41,10 +41,7 @@ function changeQuantity(id, flag){
     request.addEventListener("load", function(){
         var divToChange = document.getElementById(id);
         console.log(request.responseText);
-        if(flag)
-            divToChange.children[3].innerHTML = request.responseText;
-        else
-            divToChange.children[3].innerHTML = request.responseText;
+        divToChange.children[4].innerHTML = request.responseText;
     })
 }
 

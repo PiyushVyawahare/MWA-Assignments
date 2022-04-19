@@ -86,7 +86,7 @@ img{
 
 .productDiv{
     text-align: left;
-    width: 20%;
+    width: 19%;
     padding: 20px;
     margin: 10px;
     border: 1px solid #9B72AA;
@@ -97,15 +97,13 @@ img{
 }
 
 #popup{
-    width: 50%;
+    width: 30%;
+
     padding: 20px;
-    margin: auto;
     border: 1px solid #9B72AA;
     border-radius: 10px;
-    box-shadow: 10px 10px 8px #888888;
+    box-shadow: 10px 10px 8px black;
     position: fixed;
-    margin-left: 22%;
-
     background-color: #ffffff;
 }
 
@@ -146,7 +144,7 @@ img{
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	margin: 10px 5px 10px 5px;
+	margin: 10px 5px 10px 0px;
     cursor: pointer;
 }
 
@@ -157,7 +155,7 @@ img{
 	padding: 8px;
 	text-align: center;
 	display: inline-block;
-	margin: 10px 5px 10px 5px;
+	margin: 10px 5px 10px 0px;
     cursor: pointer;
 }
 
