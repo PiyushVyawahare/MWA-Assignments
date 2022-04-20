@@ -1,4 +1,4 @@
-<%- include("partials/header", {loggedIn: loggedIn, name: username, pic: profile_pic, userType: userType}) %>
+<%- include("partials/header", {loggedIn: loggedIn, username: username, profile_pic: profile_pic, userType: userType}) %>
 
     <h1>Swagat he apka</h1>
     <% if(userType == 1){ %>
@@ -19,12 +19,14 @@
                     <button class="closeBtn">×</button><br>
                     <img src= <%= product.product_pic %> alt="product_pic" width="200px" height="200px">
                     <h4> <%= product.product_name %></h4>
-                    <h4> <%= product.product_price %></h4>
+                    <h4> Price: ₹<%= product.product_price %></h4>
+                    <h4> In Stock: <%= product.product_stock %></h4>
                     <h4> <%= product.product_desc %></h4>
                 </div>
                 <img src= <%= product.product_pic %> alt="product_pic" width="200px" height="200px">
                 <h4> <%= product.product_name %></h4>
-                <h4> <%= product.product_price %></h4>
+                <h4> Price: ₹<%= product.product_price %></h4>
+                <h4> In Stock: <%= product.product_stock %></h4>
                 <% if(userType == 1){ %>
                     <button id="updateProductBtn" class="updateProductBtn buttons">Update Product</button>
                     <button id="deleteProductBtn" class="deleteProductBtn buttons">Delete Product</button>

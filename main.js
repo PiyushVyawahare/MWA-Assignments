@@ -492,6 +492,84 @@ app.route("/addProduct").get(function(req, res){
 })
 
 
+app.route("/updateProduct/:product_id").get(function(req, res){
+    var loggedIn = req.session.isLoggedIn;
+    if(loggedIn){
+        var user = req.session.user;
+        if(user.userType === 1){
+            var product_id = req.params.product_id;
+
+            productModel.findOne({_id: product_id}).then(function(product){
+                if(product){
+                    res.render("updateProduct", { error: "", product: product, loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+                    console.log(product);
+                }
+                else
+                    console.log("error occured");
+            });
+        }
+    }    
+}).post(prd.single("product_pic"), function(req, res){
+    var loggedIn = req.session.isLoggedIn;
+    if(loggedIn){
+        var user = req.session.user;
+        if(user.userType === 1){
+            var product_id = req.params.product_id;
+
+            var file = req.file;
+            var name = req.body.productname;
+            var price = req.body.productprice;
+            var stock = req.body.productstock;
+            var desc = req.body.productdesc;
+            if(file)
+                productModel.updateOne(
+                    {_id: product_id}, 
+                    {
+                        product_pic: file.filename, 
+                        product_name: name, 
+                        product_price: price, 
+                        product_stock: stock, 
+                        product_desc: desc
+                    },
+                    function(err, data){
+                        if(!err)
+                            res.render("updateProduct", { error: "Product updated Succeefully!!", product: "", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+                        else
+                            res.render("updateProduct", { error: "Error Occured"+err, product: "", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+                    }
+                );
+            else
+                productModel.updateOne(
+                    {_id: product_id}, 
+                    {
+                        product_name: name, 
+                        product_price: price, 
+                        product_stock: stock, 
+                        product_desc: desc
+                    },
+                    function(err, data){
+                        if(!err)
+                            res.render("updateProduct", { error: "Product updated Succeefully!!", product: "", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+                        else
+                            res.render("updateProduct", { error: "Error Occured", product: "", loggedIn: loggedIn, username: user.username, profile_pic: user.profile_pic});
+                    }
+                );
+        }
+    }
+});
+
+app.post("/deleteProduct", function(req, res){
+    var id = req.body.id;
+
+    productModel.deleteOne({_id: id}).then(function(product){
+        if(product)
+            res.status(200).end();
+        else
+            res.status(401).end();
+    })
+});
+
+
 app.listen(3000, function(){
 	console.log("server running at port http://localhost:3000");
 })

@@ -97,13 +97,14 @@ img{
 }
 
 #popup{
+    position: fixed;
     width: 30%;
-
+    bottom: 25%;
+    right: 25%;
     padding: 20px;
     border: 1px solid #9B72AA;
     border-radius: 10px;
     box-shadow: 10px 10px 8px black;
-    position: fixed;
     background-color: #ffffff;
 }
 
@@ -173,12 +174,25 @@ img{
     cursor: pointer;
 }
 
-#goToHomeBtn, #goToCartBtn{
+#goToHomeBtn, #goToCartBtn, #updateProductBtn, #addProductBtn{
     background-color: #1877f2;
 	color: white;
     border: 1px solid #1877f2;
 	border-radius: 2px;
-	padding: 8px;
+	padding: 7px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 10px 5px 10px 5px;
+    cursor: pointer;
+}
+
+#deleteProductBtn{
+    background-color: #750303;
+	color: white;
+    border: 1px solid #750303;
+	border-radius: 2px;
+	padding: 7px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
