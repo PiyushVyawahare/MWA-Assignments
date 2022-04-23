@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Khaaas Baate &#8211; SCALEHIGH TECHNOLOGIES</title>
+	<atom:link href="/category/khaaas-baate/feed/" rel="self" type="application/rss+xml" />
+	<link></link>
+	<description>We Mean Velocity</description>
+	<lastBuildDate>Sat, 23 Apr 2022 08:12:59 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>
+	hourly	</sy:updatePeriod>
+	<sy:updateFrequency>
+	1	</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=5.9.3</generator>
+	<item>
+		<title>Careers</title>
+		<link>/2022/04/23/varad/</link>
+					<comments>/2022/04/23/varad/#respond</comments>
+		
+		<dc:creator><![CDATA[varad2333]]></dc:creator>
+		<pubDate>Sat, 23 Apr 2022 07:52:33 +0000</pubDate>
+				<category><![CDATA[Khaaas Baate]]></category>
+		<guid isPermaLink="false">/?p=5</guid>
+
+					<description><![CDATA[We offer various services in the area of banking, pharma,etc all round the globe we look for candidates willing to grow with desired speed and in the right domain i.e velocity . So we require candidates with growth mindset willing to work round the globe with the required expertise]]></description>
+										<content:encoded><![CDATA[
+<p>We offer various services in the area of banking, pharma,etc all round the globe we look for candidates willing to grow with desired speed and in the right domain i.e velocity . So we require candidates with growth mindset willing to work round the globe with the required expertise</p>
+
+
+
+<p> </p>
+]]></content:encoded>
+					
+					<wfw:commentRss>/2022/04/23/varad/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+			</item>
+		<item>
+		<title>Customer Insights</title>
+		<link>/2022/04/23/hello-world/</link>
+					<comments>/2022/04/23/hello-world/#comments</comments>
+		
+		<dc:creator><![CDATA[varad2333]]></dc:creator>
+		<pubDate>Sat, 23 Apr 2022 07:51:00 +0000</pubDate>
+				<category><![CDATA[Khaaas Baate]]></category>
+		<guid isPermaLink="false">/?p=1</guid>
+
+					<description><![CDATA[European Bank Secures Banking Services, Goes Digital Challenge The client needed to build new digital capabilities on cloud A leading European bank wanted to digitize its core banking system to offer functionalities such as payments, loans and credit processing through online and mobile channels. They wanted to build a scalable distributed banking system for greater [&#8230;]]]></description>
+										<content:encoded><![CDATA[
+<p><strong>European Bank Secures Banking Services, Goes Digital</strong></p>
+
+
+
+<h2>Challenge</h2>
+
+
+
+<h3>The client needed to build new digital capabilities on cloud</h3>
+
+
+
+<p>A leading European bank wanted to digitize its core banking system to offer functionalities such as payments, loans and credit processing through online and mobile channels. They wanted to build a scalable distributed banking system for greater agility and increased transactional speed. The legacy architecture did not support frequent release of next-gen applications and features. There was a need to build new digital capabilities with better security, scalability and availability without incurring any downtime post digitalization.</p>
+
+
+
+<h2>Solution</h2>
+
+
+
+<h3>The banks deploys microservices in Kubernetes cluster for secure and upgraded architecture.</h3>
+
+
+
+<p>Scalehigh Technologies elevated the security posture of the bank, which helped to reduce the cyberattack surface, without any service disruptions. Scalehigh Technologies re-architected Java applications hosted in EC2 to microservices, developed front-end UI for a mobile platform, and designed infrastructure to stream high velocity of customer requests by deploying Kafka nodes on AWS EKS clusters. By automating the foundation through Terraform, Scalehigh Technologies built the AWS account structure to host the business applications, Kafka nodes and microservices. Scalehigh Technologies automated DevSecOps pipelines built in Jenkins and integrated with Sonar and Nexus tools to ensure the security of the new microservices architecture, further remodeling it with Kafka to decouple sender and receiver services via asynchronous messaging for a fast and reliable inter-service messaging facility. Role-based access controls (RBAC) were leveraged to secure Kubernetes API server operations and improved security posture of the AWS environment’s Kubernetes clusters.</p>
+
+
+
+<h2>Benefit</h2>
+
+
+
+<h3>The bank is now able to respond to customer requirements across channels in real time.</h3>
+
+
+
+<p>TCS helped the client adopt microservices-based architecture for accelerated delivery of applications and features. By supporting the creation of dedicated identity and access management roles, TCS also regulated user access into the bank’s AWS environment.</p>
+
+
+
+<p>The client now enjoys:</p>
+
+
+
+<ul><li>Accelerated delivery of applications and features</li><li>Improved responsiveness for payments and loans&nbsp;</li><li>Reduced enterprise attack surface through fine-grained IAM roles</li><li>Accelerated time-to-market through automated security checks in&nbsp;</li><li>Easy identification of vulnerabilities in application development cycle</li></ul>
+]]></content:encoded>
+					
+					<wfw:commentRss>/2022/04/23/hello-world/feed/</wfw:commentRss>
+			<slash:comments>1</slash:comments>
+		
+		
+			</item>
+	</channel>
+</rss>
