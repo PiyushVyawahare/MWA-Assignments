@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOG IN</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="mainDiv">
+        <h1>Log In</h1>
+        <br>
+        <% if(error) { %>
+            <p id="errorNode"><%= error %></p>
+        <% } %>
+        <form method="post", action="/login">
+            <input type="text" name="username" id="username" placeholder="Enter username*" required><br>
+            <input type="password" name="password" id="password" placeholder="Enter password*" required><br>
+            <input type="submit" value="LOG IN" id="logInButton">
+        </form>
+        <div style="text-align: right; margin-right: 20px;">
+            <a href="/forgotPassword">Forgot Password?</a>
+        </div>
+        <hr>
+        <p>Not registered yet??</p>
+        <a href="/register">
+            <button id="registerBtn">REGISTER</button>
+        </a>
+    </div>
+</body>
+</html>
